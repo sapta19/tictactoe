@@ -1,3 +1,5 @@
+and this is styles.css
+
 .App {
   font-family: sans-serif;
   text-align: center;
@@ -72,9 +74,6 @@
   transform: translate(-2%, 34%) rotate(90deg);
   animation: draw-line 0.5s ease forwards;
 }
-.winner-message {
-  display: flex;
-}
 @keyframes draw-line {
   0% {
     width: 0;
@@ -95,3 +94,4 @@
     opacity: 1;
   }
 }
+

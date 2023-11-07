@@ -1,58 +1,103 @@
 import { useEffect, useState } from "react";
-import { checkForWinner, winCombinations } from "./gameUtils"; // Assuming gameUtils.js contains these exports
-
 export default function Board() {
   const [isCross, setIsCross] = useState(true);
   const [resultArr, setResultArr] = useState(Array(9).fill(null));
-  const [wonPlayer, setWonPlayer] = useState(null);
+  const [wonPlayer, setWonPlayer] = useState(false);
   const [winCombination, setWinCombination] = useState([]);
   const [winClass, setWinClass] = useState("");
-
+  const winCombinations = [
+    {
+      indexCombination: [0, 1, 2],
+      winClass: "winner horizontal"
+    },
+    {
+      indexCombination: [3, 4, 5],
+      winClass: "winner horizontal"
+    },
+    {
+      indexCombination: [6, 7, 8],
+      winClass: "winner horizontal"
+    },
+    {
+      indexCombination: [0, 3, 6],
+      winClass: "winner vertical"
+    },
+    {
+      indexCombination: [1, 4, 7],
+      winClass: "winner vertical"
+    },
+    {
+      indexCombination: [2, 5, 8],
+      winClass: "winner vertical"
+    },
+    {
+      indexCombination: [0, 4, 8],
+      winClass: "winner left-diagonal"
+    },
+    {
+      indexCombination: [2, 4, 6],
+      winClass: "winner right-diagonal"
+    }
+  ];
   useEffect(() => {
-    const winner = checkForWinner(resultArr);
-    if (winner) {
-      setWonPlayer(isCross ? "O" : "X");
-      setWinCombination(winner.indexCombination);
-      setWinClass(winner.winClass);
+    for (let combination of winCombinations) {
+      if (
+        resultArr[combination.indexCombination[0]] ==
+          resultArr[combination.indexCombination[1]] &&
+        resultArr[combination.indexCombination[1]] ==
+          resultArr[combination.indexCombination[2]] &&
+        resultArr[combination.indexCombination[0]] != null
+      ) {
+        const wonPlayer = isCross ? "2" : "1";
+        setWonPlayer(wonPlayer);
+        setWinCombination(combination.indexCombination);
+        setWinClass(combination.winClass);
+        break;
+      }
     }
-  }, [resultArr, isCross]);
-
-  function handleClick(index) {
-    if (!resultArr[index] && !wonPlayer) {
+  }, [resultArr]);
+  function handleClick(e) {
+    if (resultArr[e] == null && wonPlayer == false) {
+      setIsCross(!isCross);
       setResultArr((prevArr) => {
-        const newArr = [...prevArr];
-        newArr[index] = isCross ? "X" : "O";
-        return newArr;
+        let finalArray = [...prevArr];
+        prevArr[e] = isCross ? "X" : "0";
+        return finalArray;
       });
-      debugger;
-      setIsCross((prevIsCross) => !prevIsCross);
     }
   }
-
-  function resetGame() {
-    setResultArr(Array(9).fill(null));
-    setWinCombination([]);
-    setWinClass("");
-    setWonPlayer(null);
-  }
-
   return (
-    <div className="container">
-      {resultArr.map((value, index) => (
-        <div
-          className={`box ${winCombination.includes(index) ? winClass : ""}`}
-          key={index}
-          onClick={() => handleClick(index)}
-        >
-          {value}
-        </div>
-      ))}
-      {wonPlayer && (
-        <div className="">
-          <span>Player {wonPlayer} Won!</span>
-          <button onClick={resetGame}>Restart Game</button>
-        </div>
-      )}
+    <div className="">
+      <div className="container">
+        {resultArr.map((e, index) => {
+          return (
+            <div
+              className={`box ${
+                winCombination.includes(index) ? `winner ${winClass}` : ""
+              }`}
+              key={index}
+              onClick={() => handleClick(index)}
+            >
+              {e}
+            </div>
+          );
+        })}
+        {wonPlayer && (
+          <>
+            <span>Player {wonPlayer} Won</span>
+            <button
+              onClick={() => {
+                setResultArr(Array(9).fill(null));
+                setWinCombination([]);
+                setWinClass("");
+                setWonPlayer(false);
+              }}
+            >
+              Restart Game
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
