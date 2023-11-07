@@ -1,0 +1,97 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2px;
+  width: max-content;
+  margin: auto;
+}
+.box {
+  background: lightblue;
+  height: 100px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  border: 2px solid black;
+  cursor: pointer;
+}
+.box.winner {
+  background: gold;
+  position: relative;
+}
+.box.winner.left-diagonal::after {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 49%;
+  width: 142px;
+  height: 2px;
+  background: black;
+  transform: translate(-2%, 34%) rotate(45deg);
+  animation: draw-diagonal 0.5s ease forwards;
+}
+.box.winner.right-diagonal::after {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 49%;
+  width: 142px;
+  height: 2px;
+  background: black;
+  transform: translate(-2%, 34%) rotate(135deg);
+  animation: draw-diagonal 0.5s ease forwards;
+}
+
+.box.winner.horizontal::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 49%;
+  width: 100px;
+  height: 2px;
+  background: black;
+  transform: translate(-2%, 34%) rotate(0deg);
+  animation: draw-line 0.5s ease forwards;
+}
+.box.winner.vertical::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 49%;
+  width: 102px;
+  height: 2px;
+  background: black;
+  transform: translate(-2%, 34%) rotate(90deg);
+  animation: draw-line 0.5s ease forwards;
+}
+.winner-message {
+  display: flex;
+}
+@keyframes draw-line {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    width: 102px;
+    opacity: 1;
+  }
+}
+@keyframes draw-diagonal {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    width: 142px;
+    opacity: 1;
+  }
+}
